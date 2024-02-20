@@ -2,6 +2,9 @@
 
 namespace ConsoleApp2.Utils
 {
+    /// <summary>
+    /// Extended math functions.
+    /// </summary>
     public static class EMath
     {
         /// <summary>

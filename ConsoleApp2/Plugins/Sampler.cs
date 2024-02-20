@@ -5,9 +5,16 @@ namespace ConsoleApp2.Plugins
 {
     public class Sampler : PluginBase
     {
-
+        /// <summary>
+        /// Audio index from pool that this sampler need to play
+        /// </summary>
         public int AudioIndex;
+
+        /// <summary>
+        /// The audio position offset.
+        /// </summary>
         public ulong StartPosition, EndPosition;
+
         double current = 0;
         double step = -1;
         double fadeOut = 0;

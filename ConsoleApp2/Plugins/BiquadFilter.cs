@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp2.Plugins
 {
+    /// <summary>
+    /// Class for filtering an audio.
+    /// </summary>
     public class BiquadFilter : PluginBase
     {
         const double antiDenormal = 1e-30;
@@ -226,9 +229,8 @@ namespace ConsoleApp2.Plugins
         public void MakeFormantFilter(double theta, double bandwidth, double gain)
         {
             double alpha = Math.Sin(theta) * Math.Sinh(Math.Log(2) / 2 * bandwidth * theta / Math.Sin(theta));
-            double A = Math.Pow(10, gain / 20); // Convert gain from dB to linear scale
+            double A = gain;
 
-            // Calculate coefficients based on formant filter equations
             double b0 = 1 + alpha * A;
             double b1 = -2 * Math.Cos(theta);
             double b2 = 1 - alpha * A;

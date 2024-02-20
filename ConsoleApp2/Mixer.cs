@@ -1,14 +1,15 @@
 ﻿using ConsoleApp2.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
+    /// <summary>
+    /// Base class for manipulating and mix between multy channels.
+    /// </summary>
     public class Mixer
     {
+        /// <summary>
+        /// All the channels in this mixer.
+        /// </summary>
         public EventList<Channel> Channels = new EventList<Channel>();
 
         public ushort BufferSize = 2048;
@@ -37,6 +38,11 @@ namespace ConsoleApp2
                 }
             };
         }
+        
+        /// <summary>
+        /// Process the buffer from the current sample position and return the result.
+        /// </summary>
+        /// <returns></returns>
         public double[,] ProcessBuffer()
         {
             double[,] ret = new double[2, BufferSize];

@@ -1,9 +1,13 @@
 ﻿
 namespace ConsoleApp2.Utils
 {
+    /// <summary>
+    /// Class for measure and converters
+    /// </summary>
     public static class Measure
     {
         const double hertzConvertMagic = 20000.0 / (2 * Math.PI);
+
         /// <summary>
         /// Return the measured length of a specific beat in bpm.
         /// For example to get 1/16 length pass to the barDividor 16.
@@ -70,6 +74,7 @@ namespace ConsoleApp2.Utils
         {
             return theta * hertzConvertMagic / sampleRate;
         }
+
         /// <summary>
         /// Convert hertz to theta
         /// </summary>

@@ -2,7 +2,6 @@
 using ConsoleApp2.Midi;
 using ConsoleApp2.Plugins;
 using ConsoleApp2.Utils;
-using System.Collections.ObjectModel;
 
 namespace ConsoleApp2
 {
@@ -80,7 +79,14 @@ namespace ConsoleApp2
             };
         }
 
-        List<Channel>? GetChannels(ChannelType type, ChannelSubType sub)
+        /// <summary>
+        /// Return a channels from the same mixer that this channel is belong.
+        /// Based on type and sub type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="sub"></param>
+        /// <returns></returns>
+        public List<Channel>? GetChannels(ChannelType type, ChannelSubType sub)
         {
             return OnRequestChannels?.Invoke(type, sub);
         }

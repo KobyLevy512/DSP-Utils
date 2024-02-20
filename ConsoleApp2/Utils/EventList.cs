@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ConsoleApp2.Utils
 {
     public delegate void ItemAdded<T>(T item);
     public delegate void ItemsAdded<T>(IEnumerable<T> item);
+
+    /// <summary>
+    /// Same as List<T> but with event when value is added.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class EventList<T>:List<T>
     {
         public event ItemAdded<T>? OnItemAdded;
