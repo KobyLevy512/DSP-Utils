@@ -1,7 +1,6 @@
-﻿
-using ConsoleApp2.Midi;
+﻿using ConsoleApp2.Midi;
 
-namespace ConsoleApp2.Plugins
+namespace ConsoleApp2.Plugins.Instrument
 {
     public class Sampler : PluginBase
     {
@@ -34,13 +33,13 @@ namespace ConsoleApp2.Plugins
 
         public override void Process(ref double l, ref double r)
         {
-            if(fadeOut > 0)
+            if (fadeOut > 0)
             {
                 if (current <= EndPosition)
                 {
                     l = Pool.Audio[AudioIndex][0, (ulong)current] * fadeOut;
                     r = Pool.Audio[AudioIndex][0, (ulong)current] * fadeOut;
-                    current+=step;
+                    current += step;
                     fadeOut -= 0.01;
                 }
                 else
@@ -48,13 +47,13 @@ namespace ConsoleApp2.Plugins
                     fadeOut = 0;
                 }
             }
-            else if(on)
+            else if (on)
             {
-                if(current <= EndPosition)
+                if (current <= EndPosition)
                 {
                     l = Pool.Audio[AudioIndex][0, (ulong)current];
                     r = Pool.Audio[AudioIndex][1, (ulong)current];
-                    current+=step;
+                    current += step;
                 }
                 else
                 {

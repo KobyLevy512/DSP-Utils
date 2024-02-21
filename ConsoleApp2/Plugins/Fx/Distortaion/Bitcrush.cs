@@ -1,5 +1,4 @@
-﻿
-namespace ConsoleApp2.Plugins
+﻿namespace ConsoleApp2.Plugins.Fx.Distortaion
 {
     public class Bitcrush : PluginBase
     {
@@ -9,7 +8,7 @@ namespace ConsoleApp2.Plugins
         double maxValue = Math.Pow(2, 64) - 1;
         public byte BitDepth
         {
-            get=>bitDepth;
+            get => bitDepth;
             set
             {
                 bitDepth = value;
@@ -18,7 +17,7 @@ namespace ConsoleApp2.Plugins
         }
         public override void Process(ref double l, ref double r)
         {
-            if((ulong)curDivide % base.GetChannel().BelongMixer.SamplePosition == 0)
+            if ((ulong)curDivide % GetChannel().BelongMixer.SamplePosition == 0)
             {
                 l = Math.Round(l * maxValue) / maxValue;
                 r = Math.Round(r * maxValue) / maxValue;

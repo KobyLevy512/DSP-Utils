@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp2.Plugins
+﻿namespace ConsoleApp2.Plugins.Fx.Filter
 {
     /// <summary>
     /// Class for filtering an audio.
@@ -27,7 +21,7 @@ namespace ConsoleApp2.Plugins
         double outputCoeff1 = 0;
         double outputCoeff2 = 0;
 
-        FilterState 
+        FilterState
             leftState = new FilterState(),
             rightState = new FilterState();
 
@@ -126,7 +120,7 @@ namespace ConsoleApp2.Plugins
         }
         public void MakeHighPass(double theta, double q)
         {
-            double alpha = Math.Sin(theta) /(q * 2);
+            double alpha = Math.Sin(theta) / (q * 2);
             double cs0 = Math.Cos(theta);
             double cs1 = 1 + cs0;
             double b0 = cs1 * 0.5;
@@ -147,12 +141,12 @@ namespace ConsoleApp2.Plugins
             double sqrtAx2xAlpha = 2 * alpha * doubleSquareRootGain;
 
             double cs0 = Math.Cos(theta64);
-            double b0 = A * ((A + 1) - (A - 1) * cs0 + sqrtAx2xAlpha);
-            double b1 = 2 * A * ((A - 1) - (A + 1) * cs0);
-            double b2 = A * ((A + 1) - (A - 1) * cs0 - sqrtAx2xAlpha);
-            double _a0 = 1 / ((A + 1) + (A - 1) * cs0 + sqrtAx2xAlpha);
-            double a1 = -2 * ((A - 1) + (A + 1) * cs0);
-            double a2 = (A + 1) + (A - 1) * cs0 - sqrtAx2xAlpha;
+            double b0 = A * (A + 1 - (A - 1) * cs0 + sqrtAx2xAlpha);
+            double b1 = 2 * A * (A - 1 - (A + 1) * cs0);
+            double b2 = A * (A + 1 - (A - 1) * cs0 - sqrtAx2xAlpha);
+            double _a0 = 1 / (A + 1 + (A - 1) * cs0 + sqrtAx2xAlpha);
+            double a1 = -2 * (A - 1 + (A + 1) * cs0);
+            double a2 = A + 1 + (A - 1) * cs0 - sqrtAx2xAlpha;
 
             inputCoeff0 = b0 * _a0;
             inputCoeff1 = b1 * _a0;
@@ -166,14 +160,14 @@ namespace ConsoleApp2.Plugins
             double alpha = Math.Sin(theta) * sqr2_2;
             double sqrtAx2xAlpha = 2 * alpha * doubleSquareRootGain;
 
-            
+
             double cs0 = Math.Cos(theta);
-            double b0 = A * ((A + 1) + (A - 1) * cs0 + sqrtAx2xAlpha);
-            double b1 = -2 * A * ((A - 1) + (A + 1) * cs0);
-            double b2 = A * ((A + 1) + (A - 1) * cs0 - sqrtAx2xAlpha);
-            double _a0 = 1 / ((A + 1) - (A - 1) * cs0 + sqrtAx2xAlpha);
-            double a1 = 2 * ((A - 1) - (A + 1) * cs0);
-            double a2 = (A + 1) - (A - 1) * cs0 - sqrtAx2xAlpha;
+            double b0 = A * (A + 1 + (A - 1) * cs0 + sqrtAx2xAlpha);
+            double b1 = -2 * A * (A - 1 + (A + 1) * cs0);
+            double b2 = A * (A + 1 + (A - 1) * cs0 - sqrtAx2xAlpha);
+            double _a0 = 1 / (A + 1 - (A - 1) * cs0 + sqrtAx2xAlpha);
+            double a1 = 2 * (A - 1 - (A + 1) * cs0);
+            double a2 = A + 1 - (A - 1) * cs0 - sqrtAx2xAlpha;
 
             inputCoeff0 = b0 * _a0;
             inputCoeff1 = b1 * _a0;
@@ -231,7 +225,7 @@ namespace ConsoleApp2.Plugins
             outputCoeff2 = -a2 * _a0;
         }
         public void MakeAllPass(double theta, double q)
-        { 
+        {
             double alpha = Math.Sin(theta) * 0.5 / q;
             double cs0 = Math.Sin(theta);
             double b0 = 1 - alpha;

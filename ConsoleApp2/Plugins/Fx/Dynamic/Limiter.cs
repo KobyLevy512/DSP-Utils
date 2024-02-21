@@ -1,6 +1,4 @@
-﻿
-
-namespace ConsoleApp2.Plugins
+﻿namespace ConsoleApp2.Plugins.Fx.Dynamic
 {
     public class Limiter : PluginBase
     {
@@ -10,8 +8,8 @@ namespace ConsoleApp2.Plugins
         {
             l *= Input;
             r *= Output;
-            if(l > Output) l = Output;
-            if(r > Output) r = Output;
+            if (l > Output) l = Output;
+            if (r > Output) r = Output;
         }
     }
 }

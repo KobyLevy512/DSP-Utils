@@ -1,5 +1,4 @@
-﻿
-namespace ConsoleApp2.Plugins
+﻿namespace ConsoleApp2.Plugins.Fx.Dynamic
 {
     public class EnvelopeShaper : PluginBase
     {
@@ -24,11 +23,11 @@ namespace ConsoleApp2.Plugins
         }
         public override void Process(ref double l, ref double r)
         {
-            if(reset)
+            if (reset)
             {
                 l *= Attack * attackPos;
                 r *= Attack * attackPos;
-                if(attackPos > 1.0)
+                if (attackPos > 1.0)
                 {
                     attackPos -= 1.0 / AttackLength;
                 }
@@ -37,7 +36,7 @@ namespace ConsoleApp2.Plugins
                 releaseBuffer.RemoveAt(0);
                 releaseBuffer.RemoveAt(0);
 
-                if(l == 0 && r == 0)
+                if (l == 0 && r == 0)
                 {
                     reset = false;
                     releaseVol = 1;
@@ -45,12 +44,12 @@ namespace ConsoleApp2.Plugins
             }
             else
             {
-                if(l != 0 || r != 0)
+                if (l != 0 || r != 0)
                 {
                     reset = true;
                     attackPos = Attack;
                 }
-                if(releasePos < releaseBuffer.Count)
+                if (releasePos < releaseBuffer.Count)
                     l += releaseBuffer[releasePos++] * releaseVol;
                 if (releasePos < releaseBuffer.Count)
                     r += releaseBuffer[releasePos++] * releaseVol;

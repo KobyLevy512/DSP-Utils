@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp2.Plugins
+namespace ConsoleApp2.Plugins.Fx.Dynamic
 {
     public class Smoother : PluginBase
     {
@@ -20,11 +20,11 @@ namespace ConsoleApp2.Plugins
         double lastLeft, lastRight;
         public override void Process(ref double l, ref double r)
         {
-            if(Math.Abs(lastLeft - l) >= ThreshHold)
+            if (Math.Abs(lastLeft - l) >= ThreshHold)
             {
                 l = EMath.Lerp(l, lastLeft, Intensity);
             }
-            if(Math.Abs(lastRight - r) >= ThreshHold)
+            if (Math.Abs(lastRight - r) >= ThreshHold)
             {
                 r = EMath.Lerp(r, lastRight, Intensity);
             }

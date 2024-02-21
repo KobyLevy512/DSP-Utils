@@ -1,7 +1,6 @@
-﻿
-using ConsoleApp2.Utils;
+﻿using ConsoleApp2.Utils;
 
-namespace ConsoleApp2.Plugins
+namespace ConsoleApp2.Plugins.Fx.Filter
 {
     public class Eq : PluginBase
     {

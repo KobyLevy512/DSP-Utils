@@ -1,5 +1,4 @@
-﻿
-namespace ConsoleApp2.Plugins
+﻿namespace ConsoleApp2.Plugins.Fx.Basic
 {
     public class Gain : PluginBase
     {
