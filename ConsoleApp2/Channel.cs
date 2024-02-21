@@ -39,7 +39,7 @@ namespace ConsoleApp2
         BubbleFx = 16384u << 8,
         SquelchFx = 16384u << 9,
         RiserFx = 16384u << 10,
-        ReverseRiserFx = 16384u << 11,
+        ZapFx = 16384u << 11,
         BiteFx = 16384u << 12,
         LaserFx = 16384u << 13,
         NoiseFx = 16384u << 14,
