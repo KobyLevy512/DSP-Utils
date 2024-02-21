@@ -63,6 +63,7 @@ namespace ConsoleApp2
         public EventList<PluginBase> Plugins = new EventList<PluginBase>();
         public ChannelType ChannelType;
         public ChannelSubType ChannelSubType;
+        public Mixer? BelongMixer;
         public event RequestChannels? OnRequestChannels;
         public Channel()
         {

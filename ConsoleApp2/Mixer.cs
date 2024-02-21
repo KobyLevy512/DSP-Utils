@@ -25,6 +25,7 @@ namespace ConsoleApp2
                 {
                     return Channels.Where(c => (c.ChannelType & type) != 0 && (c.ChannelSubType & sub) != 0).ToList();
                 };
+                c.BelongMixer = this;
             };
 
             Channels.OnItemsAdded += (IEnumerable<Channel> ch) =>
@@ -35,6 +36,7 @@ namespace ConsoleApp2
                     {
                         return Channels.Where(c => c.ChannelType == type && c.ChannelSubType == sub).ToList();
                     };
+                    c.BelongMixer = this;
                 }
             };
         }
