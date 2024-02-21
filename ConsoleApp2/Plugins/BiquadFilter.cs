@@ -90,6 +90,26 @@ namespace ConsoleApp2.Plugins
             outputCoeff1 = 2 * cs0 * _a0;
             outputCoeff2 = -(1 - alpha) * _a0;
         }
+        public void MakeLowPass(double theta, double q, byte dbOctv)
+        {
+            MakeLowPass(theta, q);
+
+            int len = dbOctv / 12;
+            for (int i = 0; i < len; i++)
+            {
+                double alpha = Math.Sin(theta) * sqr2_2;
+                double cs0 = Math.Cos(theta);
+                double cs1 = 1 - cs0;
+                double b0 = cs1 * 0.5;
+                double _a0 = 1 / (1 + alpha);
+
+                inputCoeff0 *= b0 * _a0;
+                inputCoeff1 *= cs1 * _a0;
+                inputCoeff2 *= inputCoeff0;
+                outputCoeff1 *= 2 * cs0 * _a0;
+                outputCoeff2 *= -(1 - alpha) * _a0;
+            }
+        }
         public void MakeHighPass(double theta)
         {
             double alpha = Math.Sin(theta) * sqr2_2;
