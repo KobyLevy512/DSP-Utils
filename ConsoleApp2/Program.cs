@@ -1,8 +1,5 @@
 ﻿
 
-
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser;
 using NAudio.Wave;
 WaveFormat fmt = new WaveFormat(44100, 32, 2);
 BufferedWaveProvider buffer = new BufferedWaveProvider(fmt);
