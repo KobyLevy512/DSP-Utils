@@ -9,7 +9,7 @@ namespace ConsoleApp2.Plugins
     public class PluginBase
     {
         public event RequestChannel? OnRequestChannel;
-
+        public bool Bypass = false;
         /// <summary>
         /// Return the channel that this plug is on.
         /// </summary>

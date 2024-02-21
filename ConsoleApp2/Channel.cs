@@ -117,7 +117,8 @@ namespace ConsoleApp2
             }
             foreach(PluginBase plug in Plugins)
             {
-                plug.Process(ref l, ref r);
+                if(!plug.Bypass)
+                    plug.Process(ref l, ref r);
             }
         }
     }
