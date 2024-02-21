@@ -9,20 +9,57 @@ namespace ConsoleApp2.Plugins.Instrument
         /// </summary>
         public int AudioIndex;
 
-        /// <summary>
-        /// The audio position offset.
-        /// </summary>
-        public ulong StartPosition, EndPosition;
+
+        ulong startPosition, endPosition;
 
         double current = 0;
         double step = -1;
         double fadeOut = 0;
         bool on = false;
+
+        /// <summary>
+        /// The start audio position offset.
+        /// </summary>
+        public ulong StartPosition
+        {
+            get => startPosition;
+            set
+            {
+                if(startPosition >= (ulong)Pool.Audio[AudioIndex].GetLength(1))
+                {
+                    startPosition = (ulong)Pool.Audio[AudioIndex].GetLength(1) - 1;
+                }
+                else startPosition = value;
+            }
+        }
+
+        /// <summary>
+        /// The end audio position offset.
+        /// </summary>
+        public ulong EndPosition
+        {
+            get => endPosition;
+            set
+            {
+                if (endPosition >= (ulong)Pool.Audio[AudioIndex].GetLength(1))
+                {
+                    endPosition = (ulong)Pool.Audio[AudioIndex].GetLength(1) - 1;
+                }
+                else endPosition = value;
+            }
+        }
         public override void MidiOn(MidiData data)
         {
-            on = true;
-            step = Math.Pow(2, (data.Note - 36) / 12.0);
-            current = StartPosition;
+            if(data.Type == MidiType.Pitchbend)
+            {
+                step += Math.Pow(2, (data.Velocity - 36) / 12.0);
+            }
+            else
+            {
+                on = true;
+                step = Math.Pow(2, (data.Note - 36) / 12.0);
+                current = startPosition;
+            }
         }
 
         public override void MidiOff(MidiData data)
@@ -35,10 +72,10 @@ namespace ConsoleApp2.Plugins.Instrument
         {
             if (fadeOut > 0)
             {
-                if (current <= EndPosition)
+                if (current <= endPosition)
                 {
                     l = Pool.Audio[AudioIndex][0, (ulong)current] * fadeOut;
-                    r = Pool.Audio[AudioIndex][0, (ulong)current] * fadeOut;
+                    r = Pool.Audio[AudioIndex][1, (ulong)current] * fadeOut;
                     current += step;
                     fadeOut -= 0.01;
                 }
@@ -49,7 +86,7 @@ namespace ConsoleApp2.Plugins.Instrument
             }
             else if (on)
             {
-                if (current <= EndPosition)
+                if (current <= endPosition)
                 {
                     l = Pool.Audio[AudioIndex][0, (ulong)current];
                     r = Pool.Audio[AudioIndex][1, (ulong)current];
