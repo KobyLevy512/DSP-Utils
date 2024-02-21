@@ -55,7 +55,21 @@
 
             r = output;
         }
+        public override void Process(ref double mono)
+        {
+            double output = inputCoeff0 * mono + inputCoeff1 * leftState.InputMem1 + inputCoeff2 * leftState.InputMem2
+     + outputCoeff1 * leftState.OutputMem1 + outputCoeff2 * leftState.OutputMem2;
 
+            output += antiDenormal;
+            output -= antiDenormal;
+
+            leftState.InputMem2 = leftState.InputMem1;
+            leftState.InputMem1 = mono;
+            leftState.OutputMem2 = leftState.OutputMem1;
+            leftState.OutputMem1 = output;
+
+            mono = output;
+        }
         public void MakeLowPass(double theta)
         {
             double alpha = Math.Sin(theta) * sqr2_2;
@@ -202,6 +216,22 @@
             double b0 = alpha * _a0;
             double a1 = -2 * Math.Cos(theta);
             double a2 = 1 - alpha;
+
+            inputCoeff0 = b0;
+            inputCoeff1 = 0;
+            inputCoeff2 = -b0;
+            outputCoeff1 = -a1 * _a0;
+            outputCoeff2 = -a2 * _a0;
+        }
+        public void MakeBandPass(double theta, double bandwidth, double resonance)
+        {
+            double alpha = Math.Sin(theta) * bandwidth;
+            double beta = Math.Sqrt(resonance);
+            double _a0 = 1.0 / (1.0 + alpha / beta);
+
+            double b0 = alpha * _a0;
+            double a1 = -2 * Math.Cos(theta);
+            double a2 = 1 - alpha / beta;
 
             inputCoeff0 = b0;
             inputCoeff1 = 0;

@@ -35,5 +35,6 @@ namespace ConsoleApp2.Plugins
         /// <param name="l"></param>
         /// <param name="r"></param>
         public virtual void Process(ref double l, ref double r){}
+        public virtual void Process(ref double mono) { }
     }
 }
