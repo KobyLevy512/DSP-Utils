@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp2.Plugins.Fx.Distortaion
+﻿namespace ConsoleApp2.Plugins.Fx.Distortion
 {
     public class Bitcrush : PluginBase
     {
