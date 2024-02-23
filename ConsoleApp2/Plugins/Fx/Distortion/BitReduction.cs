@@ -7,7 +7,6 @@ namespace ConsoleApp2.Plugins.Fx.Distortion
         ushort depth;
         public ushort Depth
         {
-            get => depth;
             set
             {
                 depth = (ushort)(ushort.MaxValue - ushort.MaxValue * value);
