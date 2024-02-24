@@ -21,11 +21,11 @@ namespace ConsoleApp2.Utils
         }
 
 
-        public static double[] SineWave(double freq, double lenInSeconds, uint sampleRate)
+        public static double[] SineWave(double freq, uint sampleRate)
         {
             double step = PI2 / sampleRate * freq;
             double cur = 0;
-            double[] ret = new double[(int)(lenInSeconds * sampleRate)];
+            double[] ret = new double[sampleRate];
 
             for(int i = 0; i < ret.Length; i++)
             {
