@@ -38,11 +38,11 @@ namespace ConsoleApp2.Utils
         /// <returns></returns>
         public static bool SaveWaveFromMixer(string name, Mixer m, double seconds)
         {
-
+            WaveFileWriter w = null;
             try
             {
                 ulong len = Measure.SecondsToSamplesAmount(seconds, m.SampleRate);
-                WaveFileWriter w = new WaveFileWriter(name + ".wav", new WaveFormat((int)m.SampleRate, 16, 2));
+                w = new WaveFileWriter(name + ".wav", new WaveFormat((int)m.SampleRate, 16, 2));
                 while (m.SamplePosition < len)
                 {
                     float[] buf = m.ProcessBuffer();
@@ -53,9 +53,27 @@ namespace ConsoleApp2.Utils
             }
             catch
             {
+                if(w != null)
+                    w.Close();
                 return false;
             }
+        }
 
+        /// <summary>
+        /// Play a wave file from a path.
+        /// </summary>
+        /// <param name="file"></param>
+        public static void PlayWave(string file)
+        {
+            WaveFileReader r = new WaveFileReader(file + ".wav");
+            WaveOutEvent s = new WaveOutEvent();
+            s.Init(r);
+            s.Play();
+            while(s.PlaybackState == PlaybackState.Playing)
+            {
+                Thread.Sleep(100);
+            }
+            r.Close();
         }
     }
 }

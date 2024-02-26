@@ -77,7 +77,7 @@ namespace ConsoleApp2.Plugins.Instrument
                     l = Pool.Audio[AudioIndex][0, (ulong)current] * fadeOut;
                     r = Pool.Audio[AudioIndex][1, (ulong)current] * fadeOut;
                     current += step;
-                    fadeOut -= 0.01;
+                    fadeOut -= 0.001;
                 }
                 else
                 {
