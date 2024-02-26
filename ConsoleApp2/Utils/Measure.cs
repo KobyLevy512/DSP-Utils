@@ -9,6 +9,16 @@ namespace ConsoleApp2.Utils
         const double hertzConvertMagic = 20000.0 / (2 * Math.PI);
 
         /// <summary>
+        /// Convert seconds to amount of samples.
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <param name="sampleRate"></param>
+        /// <returns></returns>
+        public static ulong SecondsToSamplesAmount(double seconds, uint sampleRate)
+        {
+            return (uint)(seconds * sampleRate);
+        }
+        /// <summary>
         /// Return the measured length of a specific beat in bpm.
         /// For example to get 1/16 length pass to the barDividor 16.
         /// </summary>

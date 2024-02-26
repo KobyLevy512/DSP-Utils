@@ -14,62 +14,48 @@ namespace ConsoleApp2.Utils
         {
             WaveFileReader reader = new WaveFileReader(fileName);
             int bits = reader.WaveFormat.BitsPerSample / 8;
-            int channels = reader.WaveFormat.Channels;
             double[,] ret = new double[2, reader.Length / bits];
-            byte[] buffer = new byte[bits];
             int position = 0;
-            while(reader.Read(buffer, 0, bits * channels) != 0)
+            float[] ret1 = reader.ReadNextSampleFrame();
+            while(ret1 != null)
             {
-                if(channels == 2)
+                for(int i = 0; i < ret1.Length; i++)
                 {
-                    if (bits == 1)
-                    {
-                        ret[0, position] = buffer[0] / 255.0;
-                        ret[1, position] = buffer[1] / 255.0;
-                    }
-                    else if(bits == 2)
-                    {
-                        ret[0, position] = ((buffer[1] << 8) | (ushort)buffer[0]) / 65535.0;
-                        ret[1, position] = ((buffer[3] << 8) | (ushort)buffer[2]) / 65535.0;
-                    }
-                    else if (bits == 3)
-                    {
-                        ret[0, position] = (((uint)buffer[2] << 16) | ((uint)buffer[1] << 8) | buffer[0]) / 16777215.0;
-                        ret[1, position] = (((uint)buffer[5] << 16) | ((uint)buffer[4] << 8) | buffer[3]) / 16777215.0;
-                    }
-                    else
-                    {
-                        ret[0, position] = (((uint)buffer[3] << 24) | ((uint)buffer[2] << 16) | ((uint)buffer[1] << 8) | buffer[0]) / 4294967295.0;
-                        ret[1, position] = (((uint)buffer[7] << 24) | ((uint)buffer[6] << 16) | ((uint)buffer[5] << 8) | buffer[4]) / 4294967295.0;
-                    }
-                }
-                else
-                {
-                    if (bits == 1)
-                    {
-                        ret[0, position] = buffer[0] / 255.0;
-                        ret[1, position] = ret[0, position];
-                    }
-                    else if (bits == 2)
-                    {
-                        ret[0, position] = ((buffer[1] << 8) | (ushort)buffer[0]) / 65535.0;
-                        ret[1, position] = ret[0, position];
-                    }
-                    else if (bits == 3)
-                    {
-                        ret[0, position] = (((uint)buffer[2] << 16) | ((uint)buffer[1] << 8) | buffer[0]) / 16777215.0;
-                        ret[1, position] = ret[0, position];
-                    }
-                    else
-                    {
-                        ret[0, position] = (((uint)buffer[3] << 24) | ((uint)buffer[2] << 16) | ((uint)buffer[1] << 8) | buffer[0]) / 4294967295.0;
-                        ret[1, position] = ret[0, position];
-                    }
+                    ret[i, position] = ret1[i];
                 }
                 position++;
+                ret1 = reader.ReadNextSampleFrame();
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Save wav file from a mixer.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="m"></param>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
+        public static bool SaveWaveFromMixer(string name, Mixer m, double seconds)
+        {
+
+            try
+            {
+                ulong len = Measure.SecondsToSamplesAmount(seconds, m.SampleRate);
+                WaveFileWriter w = new WaveFileWriter(name + ".wav", new WaveFormat((int)m.SampleRate, 16, 2));
+                while (m.SamplePosition < len)
+                {
+                    float[] buf = m.ProcessBuffer();
+                    w.WriteSamples(buf, 0, buf.Length);
+                }
+                w.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
             }
 
-            return ret;
         }
     }
 }

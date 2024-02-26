@@ -1,4 +1,5 @@
 ﻿using ConsoleApp2.Utils;
+using NAudio.Wave;
 
 namespace ConsoleApp2
 {
@@ -45,18 +46,18 @@ namespace ConsoleApp2
         /// Process the buffer from the current sample position and return the result.
         /// </summary>
         /// <returns></returns>
-        public double[] ProcessBuffer()
+        public float[] ProcessBuffer()
         {
-            double[] ret = new double[BufferSize * 2];
-            for(int i = 0; i < ret.Length; i++)
+            float[] ret = new float[BufferSize * 2];
+            for(int i = 0; i < ret.Length; i+=2)
             {
                 double l = 0;
                 double r = 0;
                 foreach(Channel c in Channels)
                 {
                     c.Process(ref l, ref r, SamplePosition);
-                    ret[i] += l;
-                    ret[i + 1] += r;
+                    ret[i] += (float)l;
+                    ret[i + 1] += (float)r;
                 }
                 SamplePosition++;
             }

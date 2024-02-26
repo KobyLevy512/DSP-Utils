@@ -106,7 +106,7 @@ namespace ConsoleApp2
                         plugin.MidiOn(data);
                     }
                 }
-                else if(data.Type == MidiType.NoteOn && data.SamplePosition + data.SampleLength >= samplePosition)
+                else if(data.Type == MidiType.NoteOn && data.SamplePosition + data.SampleLength - samplePosition <= 0)
                 {
                     data.Type = MidiType.NoteOff;
                     foreach (PluginBase plugin in Plugins)
