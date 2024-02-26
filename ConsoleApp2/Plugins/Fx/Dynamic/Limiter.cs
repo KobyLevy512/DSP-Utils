@@ -7,7 +7,7 @@
         public override void Process(ref double l, ref double r)
         {
             l *= Input;
-            r *= Output;
+            r *= Input;
             if (l > Output) l = Output;
             if (r > Output) r = Output;
         }
