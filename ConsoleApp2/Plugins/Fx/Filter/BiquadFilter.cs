@@ -120,31 +120,38 @@
         }
         public void MakeHighPass(double theta)
         {
-            double alpha = Math.Sin(theta) * sqr2_2;
-            double cs0 = Math.Cos(theta);
-            double cs1 = 1 + cs0;
-            double b0 = cs1 * 0.5;
-            double _a0 = 1 / (1 + alpha);
+           double theta64 = theta;
+           double alpha = Math.Sin(theta64) * sqr2_2;
+           double cs0 = Math.Cos(theta64);
+           double b0 = (1 + cs0) * 0.5;
+           double b1 = -(1 + cs0);
+           double _a0 = 1 / (1 + alpha);
+           double a1 = -2 * cs0;
+           double a2 = 1 - alpha;
 
             inputCoeff0 = b0 * _a0;
-            inputCoeff1 = -cs1 * _a0;
+            inputCoeff1 = b1 * _a0;
             inputCoeff2 = inputCoeff0;
-            outputCoeff1 = -2 * cs0 * _a0;
-            outputCoeff2 = -(1 - alpha) * _a0;
+            outputCoeff1 = -a1 * _a0;
+            outputCoeff2 = -a2 * _a0;
         }
         public void MakeHighPass(double theta, double q)
         {
-            double alpha = Math.Sin(theta) / (q * 2);
-            double cs0 = Math.Cos(theta);
-            double cs1 = 1 + cs0;
-            double b0 = cs1 * 0.5;
+            double theta64 = theta;
+            double alpha = Math.Sin(theta64) / (q * 2);
+            double cs0 = Math.Cos(theta64);
+            double b0 = (1 + cs0) * 0.5;
+            double b1 = -(1 + cs0);
             double _a0 = 1 / (1 + alpha);
+            double a1 = -2 * cs0;
+            double a2 = 1 - alpha;
 
             inputCoeff0 = b0 * _a0;
-            inputCoeff1 = -cs1 * _a0;
+            inputCoeff1 = b1 * _a0;
             inputCoeff2 = inputCoeff0;
-            outputCoeff1 = -2 * cs0 * _a0;
-            outputCoeff2 = -(1 - alpha) * _a0;
+            outputCoeff1 = -a1 * _a0;
+            outputCoeff2 = -a2 * _a0;
+
         }
 
         public void MakeLowShelf(double theta, double doubleSquareRootGain)
@@ -171,17 +178,18 @@
         public void MakeHighShelf(double theta, double doubleSquareRootGain)
         {
             double A = doubleSquareRootGain * doubleSquareRootGain;
-            double alpha = Math.Sin(theta) * sqr2_2;
+            double theta64 = theta;
+            double alpha = Math.Sin(theta64) * sqr2_2;
             double sqrtAx2xAlpha = 2 * alpha * doubleSquareRootGain;
 
-
-            double cs0 = Math.Cos(theta);
-            double b0 = A * (A + 1 + (A - 1) * cs0 + sqrtAx2xAlpha);
-            double b1 = -2 * A * (A - 1 + (A + 1) * cs0);
-            double b2 = A * (A + 1 + (A - 1) * cs0 - sqrtAx2xAlpha);
-            double _a0 = 1 / (A + 1 - (A - 1) * cs0 + sqrtAx2xAlpha);
-            double a1 = 2 * (A - 1 - (A + 1) * cs0);
-            double a2 = A + 1 - (A - 1) * cs0 - sqrtAx2xAlpha;
+            
+            double cs0 = Math.Cos(theta64);
+            double b0 = A * ((A + 1) + (A - 1) * cs0 + sqrtAx2xAlpha);
+            double b1 = -2 * A * ((A - 1) + (A + 1) * cs0);
+            double b2 = A * ((A + 1) + (A - 1) * cs0 - sqrtAx2xAlpha);
+            double _a0 = 1 / ((A + 1) - (A - 1) * cs0 + sqrtAx2xAlpha);
+            double a1 = 2 * ((A - 1) - (A + 1) * cs0);
+            double a2 = (A + 1) - (A - 1) * cs0 - sqrtAx2xAlpha;
 
             inputCoeff0 = b0 * _a0;
             inputCoeff1 = b1 * _a0;
@@ -268,26 +276,6 @@
             inputCoeff2 = b2 * _a0;
             outputCoeff1 = -inputCoeff1;
             outputCoeff2 = -inputCoeff0;
-        }
-
-        public void MakeFormantFilter(double theta, double bandwidth, double gain)
-        {
-            double alpha = Math.Sin(theta) * Math.Sinh(Math.Log(2) / 2 * bandwidth * theta / Math.Sin(theta));
-            double A = gain;
-
-            double b0 = 1 + alpha * A;
-            double b1 = -2 * Math.Cos(theta);
-            double b2 = 1 - alpha * A;
-            double _a0 = 1.0 / (1.0 + alpha / A);
-            double a1 = -2 * Math.Cos(theta);
-            double a2 = 1 - alpha / A;
-
-            // Set filter coefficients
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = b2 * _a0;
-            outputCoeff1 = a1 * _a0;
-            outputCoeff2 = a2 * _a0;
         }
     }
 }

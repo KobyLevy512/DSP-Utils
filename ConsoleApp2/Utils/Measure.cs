@@ -93,7 +93,7 @@ namespace ConsoleApp2.Utils
         /// <returns></returns>
         public static double FromHertz(double freq, ushort sampleRate)
         {
-            return freq * (2 * Math.PI / sampleRate) * (sampleRate / 20000.0);
+            return 2 * Math.PI * freq / sampleRate;
         }
     }
 }
