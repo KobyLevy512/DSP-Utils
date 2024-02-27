@@ -23,7 +23,7 @@ kickSampler.EndPosition = (uint)Pool.Audio[0].GetLength(1) - 1;
 kick.Plugins.Add(kickSampler);
 mixer.Channels.Add(kick);
 BiquadFilter g = new BiquadFilter();
-g.MakeFormantFilter(0.3,1,0);
+g.MakeBandPass(0.7, 0.5);
 kick.Plugins.Add(g);
 FileManage.SaveWaveFromMixer("wav", mixer, 3);
 FileManage.PlayWave("wav");

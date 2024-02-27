@@ -1,74 +1,23 @@
-﻿namespace ConsoleApp2.Plugins.Fx.Filter
+﻿using ConsoleApp2.Utils;
+
+namespace ConsoleApp2.Plugins.Fx.Filter
 {
     /// <summary>
     /// Class for filtering an audio.
     /// </summary>
     public class BiquadFilter : PluginBase
     {
-        const double antiDenormal = 1e-30;
         const double sqr2_2 = 0.70710678118654;
-        private class FilterState
-        {
-            public double InputMem1 = 0;
-            public double InputMem2 = 0;
-            public double OutputMem1 = 0;
-            public double OutputMem2 = 0;
-        };
-
-        double inputCoeff0 = 0;
-        double inputCoeff1 = 0;
-        double inputCoeff2 = 0;
-        double outputCoeff1 = 0;
-        double outputCoeff2 = 0;
-
-        FilterState
-            leftState = new FilterState(),
-            rightState = new FilterState();
+        Coefficient cofR = new Coefficient(5), cofL = new Coefficient(5);
 
         public override void Process(ref double l, ref double r)
         {
-            //Left
-            double output = inputCoeff0 * l + inputCoeff1 * leftState.InputMem1 + inputCoeff2 * leftState.InputMem2
-                + outputCoeff1 * leftState.OutputMem1 + outputCoeff2 * leftState.OutputMem2;
-
-            output += antiDenormal;
-            output -= antiDenormal;
-
-            leftState.InputMem2 = leftState.InputMem1;
-            leftState.InputMem1 = l;
-            leftState.OutputMem2 = leftState.OutputMem1;
-            leftState.OutputMem1 = output;
-
-            l = output;
-
-            //Right
-            output = inputCoeff0 * r + inputCoeff1 * rightState.InputMem1 + inputCoeff2 * rightState.InputMem2
-                + outputCoeff1 * rightState.OutputMem1 + outputCoeff2 * rightState.OutputMem2;
-
-            output += antiDenormal;
-            output -= antiDenormal;
-
-            rightState.InputMem2 = rightState.InputMem1;
-            rightState.InputMem1 = r;
-            rightState.OutputMem2 = rightState.OutputMem1;
-            rightState.OutputMem1 = output;
-
-            r = output;
+            cofR.Process(ref r);
+            cofL.Process(ref l);
         }
         public override void Process(ref double mono)
         {
-            double output = inputCoeff0 * mono + inputCoeff1 * leftState.InputMem1 + inputCoeff2 * leftState.InputMem2
-     + outputCoeff1 * leftState.OutputMem1 + outputCoeff2 * leftState.OutputMem2;
-
-            output += antiDenormal;
-            output -= antiDenormal;
-
-            leftState.InputMem2 = leftState.InputMem1;
-            leftState.InputMem1 = mono;
-            leftState.OutputMem2 = leftState.OutputMem1;
-            leftState.OutputMem1 = output;
-
-            mono = output;
+            cofL.Process(ref mono);
         }
         public void MakeLowPass(double theta)
         {
@@ -78,11 +27,11 @@
             double b0 = cs1 * 0.5;
             double _a0 = 1 / (1 + alpha);
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = cs1 * _a0;
-            inputCoeff2 = inputCoeff0;
-            outputCoeff1 = 2 * cs0 * _a0;
-            outputCoeff2 = -(1 - alpha) * _a0;
+            cofL[0, 0] = (b0 * _a0, 2 * cs0 * _a0);
+            cofL[1, 1] = (cs1 * _a0, 0);
+            cofL[2, 1] = (cofL[0, 0].input, -(1 - alpha) * _a0);
+
+            cofR.Copy(cofL);
         }
         public void MakeLowPass(double theta, double q)
         {
@@ -92,11 +41,10 @@
             double b0 = cs1 * 0.5;
             double _a0 = 1 / (1 + alpha);
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = cs1 * _a0;
-            inputCoeff2 = inputCoeff0;
-            outputCoeff1 = 2 * cs0 * _a0;
-            outputCoeff2 = -(1 - alpha) * _a0;
+            cofL[0, 0] = (b0 * _a0, 2 * cs0 * _a0);
+            cofL[1, 1] = (cs1 * _a0, 0);
+            cofL[2, 1] = (cofL[0, 0].input, -(1 - alpha) * _a0);
+            cofR.Copy(cofL);
         }
         public void MakeLowPass(double theta, double q, byte dbOctv)
         {
@@ -111,12 +59,11 @@
                 double b0 = cs1 * 0.5;
                 double _a0 = 1 / (1 + alpha);
 
-                inputCoeff0 *= b0 * _a0;
-                inputCoeff1 *= cs1 * _a0;
-                inputCoeff2 *= inputCoeff0;
-                outputCoeff1 *= 2 * cs0 * _a0;
-                outputCoeff2 *= -(1 - alpha) * _a0;
+                cofL[0, 0] = (cofL[0, 0].input * b0 * _a0, cofL[0, 0].output * 2 * cs0 * _a0);
+                cofL[1, 1] = (cofL[1, 0].input * cs1 * _a0, cofL[1, 1].output);
+                cofL[2, 1] = (cofL[0, 0].input, cofL[1, 1].output * -(1 - alpha) * _a0);
             }
+            cofR.Copy(cofL);
         }
         public void MakeHighPass(double theta)
         {
@@ -129,11 +76,10 @@
            double a1 = -2 * cs0;
            double a2 = 1 - alpha;
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = inputCoeff0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (b0 * _a0, -a1 * _a0);
+            cofL[1, 1] = (b1 * _a0, 0);
+            cofL[2, 1] = (cofL[0, 0].input, -a2 * _a0);
+            cofR.Copy(cofL);
         }
         public void MakeHighPass(double theta, double q)
         {
@@ -146,11 +92,10 @@
             double a1 = -2 * cs0;
             double a2 = 1 - alpha;
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = inputCoeff0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (b0 * _a0, -a1 * _a0);
+            cofL[1, 1] = (b1 * _a0, 0);
+            cofL[2, 1] = (cofL[0, 0].input, -a2 * _a0);
+            cofR.Copy(cofL);
 
         }
 
@@ -169,11 +114,10 @@
             double a1 = -2 * (A - 1 + (A + 1) * cs0);
             double a2 = A + 1 + (A - 1) * cs0 - sqrtAx2xAlpha;
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = b2 * _a0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (b0 * _a0, -a1 * _a0);
+            cofL[1, 1] = (b1 * _a0, 0);
+            cofL[2, 1] = (b2 * _a0, -a2 * _a0);
+            cofR.Copy(cofL);
         }
         public void MakeHighShelf(double theta, double doubleSquareRootGain)
         {
@@ -191,11 +135,10 @@
             double a1 = 2 * ((A - 1) - (A + 1) * cs0);
             double a2 = (A + 1) - (A - 1) * cs0 - sqrtAx2xAlpha;
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = b2 * _a0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (b0 * _a0, -a1 * _a0);
+            cofL[1, 1] = (b1 * _a0, 0);
+            cofL[2, 1] = (b2 * _a0, -a2 * _a0);
+            cofR.Copy(cofL);
         }
 
         public void MakePeak(double theta, double halfBwInOctava, double sqrtGain)
@@ -210,11 +153,10 @@
             double _a0 = 1.0 / (1.0 + alpha_A);
             double a2 = 1 - alpha_A;
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = b2 * _a0;
-            outputCoeff1 = -inputCoeff1;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (b0 * _a0, -(b0 * _a0));
+            cofL[1, 1] = (b1 * _a0, 0);
+            cofL[2, 1] = (b2 * _a0, -a2 * _a0);
+            cofR.Copy(cofL);
         }
 
         public void MakeBandPass(double theta, double halfBwInOctava)
@@ -225,11 +167,10 @@
             double a1 = -2 * Math.Cos(theta);
             double a2 = 1 - alpha;
 
-            inputCoeff0 = b0;
-            inputCoeff1 = 0;
-            inputCoeff2 = -b0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0,0] = (b0, -a1 * _a0);
+            cofL[1,1] = (0, 0);
+            cofL[2,1] = (-b0, -a2 * _a0);
+            cofR.Copy(cofL);
         }
         public void MakeBandPass(double theta, double bandwidth, double resonance)
         {
@@ -241,11 +182,11 @@
             double a1 = -2 * Math.Cos(theta);
             double a2 = 1 - alpha / beta;
 
-            inputCoeff0 = b0;
-            inputCoeff1 = 0;
-            inputCoeff2 = -b0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (b0, -a1 * _a0);
+            cofL[1, 1] = (0, 0);
+            cofL[2, 1] = (-b0, -a2 * _a0);
+            cofR.Copy(cofL);
+             
         }
         public void MakeNotch(double theta, double halfBwInOctava)
         {
@@ -256,11 +197,11 @@
             double a1 = -2 * cs0;
             double a2 = 1 - alpha;
 
-            inputCoeff0 = _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = _a0;
-            outputCoeff1 = -a1 * _a0;
-            outputCoeff2 = -a2 * _a0;
+            cofL[0, 0] = (_a0, -a1 * _a0);
+            cofL[1, 1] = (b1 * _a0, 0);
+            cofL[2, 1] = (_a0, -a2 * _a0);
+            cofR.Copy(cofL);
+
         }
         public void MakeAllPass(double theta, double q)
         {
@@ -271,11 +212,10 @@
             double b2 = 1 + alpha;
             double _a0 = 1 / b2;
 
-            inputCoeff0 = b0 * _a0;
-            inputCoeff1 = b1 * _a0;
-            inputCoeff2 = b2 * _a0;
-            outputCoeff1 = -inputCoeff1;
-            outputCoeff2 = -inputCoeff0;
+            cofL[0, 0] = (b0 * _a0, 0);
+            cofL[1, 1] = (b1 * _a0, -cofL[0, 1].input);
+            cofL[2, 0] = (b2 * _a0, -cofL[1, 1].input);
+            cofR.Copy(cofL);
         }
     }
 }
