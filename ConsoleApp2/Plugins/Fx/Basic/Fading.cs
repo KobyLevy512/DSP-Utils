@@ -3,7 +3,7 @@ using ConsoleApp2.Utils;
 
 namespace ConsoleApp2.Plugins.Fx.Basic
 {
-    public class Fader : PluginBase
+    public class Fading : PluginBase
     {
         double dst, src, mix, mixStep;
         public void Start(double src, double dst, uint duration)
