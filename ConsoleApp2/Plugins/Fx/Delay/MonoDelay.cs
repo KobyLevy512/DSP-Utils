@@ -6,9 +6,9 @@ namespace ConsoleApp2.Plugins.Fx.Delay
     public class MonoDelay : PluginBase
     {
         public double Feedback = 0.3, Mix = 1;
-        double[] buffer;
-        int bufferFillIndex;
-        ulong bufferOffset;
+        protected double[] buffer;
+        protected int bufferFillIndex;
+        protected ulong bufferOffset;
         public Quantize Quantize
         {
             set
