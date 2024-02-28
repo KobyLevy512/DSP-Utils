@@ -115,7 +115,7 @@ namespace ConsoleApp2.Utils
         /// <param name="barDividor"></param>
         /// <param name="dividorOffset"></param>
         /// <returns></returns>
-        public static ulong SamplePosition(byte bpm, ushort sampleRate, ulong bar, byte barDividor, ushort dividorOffset)
+        public static ulong SamplePosition(byte bpm, uint sampleRate, ulong bar, byte barDividor, ushort dividorOffset)
         {
             ulong barsAmt = SamplesAmount(bpm, 1, sampleRate) * bar;
             ulong beatAmt = SamplesAmount(bpm, barDividor, sampleRate) * dividorOffset;

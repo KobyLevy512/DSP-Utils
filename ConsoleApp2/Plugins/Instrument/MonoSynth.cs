@@ -14,7 +14,7 @@ namespace ConsoleApp2.Plugins.Instrument
         public uint Glide;
         public BiquadFilter Filter = new BiquadFilter();
         public Envelope FilterEnvelope = new Envelope();
-        Fader freqGlide = new Fader();
+        Fading freqGlide = new Fading();
         int curNote = 0;
         double[] osc;
         double freq;

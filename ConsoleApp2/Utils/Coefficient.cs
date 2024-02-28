@@ -75,7 +75,7 @@ namespace ConsoleApp2.Utils
             }
             for (int i = 0; i < ret.coefOutput.Length; i++)
             {
-                ret[0, i] = (ret[0, 0].input, EMath.Lerp(l.coefOutput[0], r.coefOutput[0], value);
+                ret[0, i] = (ret[0, 0].input, EMath.Lerp(l.coefOutput[0], r.coefOutput[0], value));
             }
             return ret;
         }
