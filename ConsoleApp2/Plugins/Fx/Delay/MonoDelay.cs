@@ -20,7 +20,7 @@ namespace ConsoleApp2.Plugins.Fx.Delay
         }
         public MonoDelay(Quantize q)
         {
-            bufferOffset = Measure.SamplesAmount(GetChannel().BelongMixer.Bpm, Quantize, GetChannel().BelongMixer.SampleRate);
+            bufferOffset = Measure.SamplesAmount(GetChannel().BelongMixer.Bpm, q, GetChannel().BelongMixer.SampleRate);
             buffer = new double[bufferOffset * 2];
             bufferFillIndex = 0;
         }
