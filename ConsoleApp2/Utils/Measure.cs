@@ -40,7 +40,7 @@ namespace ConsoleApp2.Utils
         /// <param name="barDividor"></param>
         /// <param name="sampleRate"></param>
         /// <returns></returns>
-        public static ulong SamplesAmount(byte bpm, byte barDividor, ushort sampleRate)
+        public static ulong SamplesAmount(byte bpm, byte barDividor, uint sampleRate)
         {
             double mul = BpmToSecond(bpm, barDividor);
             return (ulong)(sampleRate * mul);
@@ -53,7 +53,7 @@ namespace ConsoleApp2.Utils
         /// <param name="barDividor"></param>
         /// <param name="sampleRate"></param>
         /// <returns></returns>
-        public static ulong SamplesAmount(byte bpm, Quantize quantize, ushort sampleRate)
+        public static ulong SamplesAmount(byte bpm, Quantize quantize, uint sampleRate)
         {
             switch (quantize)
             {
