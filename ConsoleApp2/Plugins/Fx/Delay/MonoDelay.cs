@@ -21,10 +21,11 @@ namespace ConsoleApp2.Plugins.Fx.Delay
 
         public override void Process(ref double mono)
         {
-            buffer[bufferFillIndex] += mono;
-            bufferFillIndex %= buffer.Length;
             ulong curIndex = ((ulong)bufferFillIndex + bufferOffset) % (ulong)buffer.Length;
-            mono = EMath.Lerp(mono, buffer[curIndex] * Feedback, Mix);
+            double result = mono + buffer[curIndex] * Feedback;
+            buffer[bufferFillIndex++] = result;
+            bufferFillIndex %= buffer.Length;
+            mono += result * Mix;
         }
         public override void Process(ref double l, ref double r)
         {
