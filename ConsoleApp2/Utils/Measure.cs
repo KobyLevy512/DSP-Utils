@@ -47,6 +47,64 @@ namespace ConsoleApp2.Utils
         }
 
         /// <summary>
+        /// Return the amount of samples needed for a beat measured by bpm.
+        /// </summary>
+        /// <param name="bpm"></param>
+        /// <param name="barDividor"></param>
+        /// <param name="sampleRate"></param>
+        /// <returns></returns>
+        public static ulong SamplesAmount(byte bpm, Quantize quantize, ushort sampleRate)
+        {
+            switch (quantize)
+            {
+                case Quantize.Q1_128:
+                    return SamplesAmount(bpm, 128, sampleRate);
+                case Quantize.Q1_128D:
+                    ulong samples = SamplesAmount(bpm, 128, sampleRate);
+                    return samples + (samples / 2);
+                case Quantize.Q1_128T:
+                    return SamplesAmount(bpm, 96, sampleRate);
+                case Quantize.Q1_64:
+                    return SamplesAmount(bpm, 64, sampleRate);
+                case Quantize.Q1_64D:
+                    samples = SamplesAmount(bpm, 64, sampleRate);
+                    return samples + (samples / 2);
+                case Quantize.Q1_64T:
+                    return SamplesAmount(bpm, 48, sampleRate);
+                case Quantize.Q1_32:
+                    return SamplesAmount(bpm, 32, sampleRate);
+                case Quantize.Q1_32D:
+                    samples = SamplesAmount(bpm, 32, sampleRate);
+                    return samples + (samples / 2);
+                case Quantize.Q1_32T:
+                    return SamplesAmount(bpm, 24, sampleRate);
+                case Quantize.Q1_16:
+                    return SamplesAmount(bpm, 16, sampleRate);
+                case Quantize.Q1_16D:
+                    samples = SamplesAmount(bpm, 16, sampleRate);
+                    return samples + (samples / 2);
+                case Quantize.Q1_16T:
+                    return SamplesAmount(bpm, 24, sampleRate);
+                case Quantize.Q1_8:
+                    return SamplesAmount(bpm, 8, sampleRate);
+                case Quantize.Q1_8D:
+                    samples = SamplesAmount(bpm, 8, sampleRate);
+                    return samples + (samples / 2);
+                case Quantize.Q1_8T:
+                    return SamplesAmount(bpm, 12, sampleRate);
+                case Quantize.Q1_4:
+                    return SamplesAmount(bpm, 4, sampleRate);
+                case Quantize.Q1_4T:
+                    return SamplesAmount(bpm, 6, sampleRate);
+                case Quantize.Q1_2:
+                    return SamplesAmount(bpm, 2, sampleRate);
+                default:
+                case Quantize.Q1_1:
+                    return SamplesAmount(bpm, 1, sampleRate);
+            }
+        }
+
+        /// <summary>
         /// Return the sample position based on a grid value.
         /// For example to get the second 1/16 at bar 3:
         /// SamplePosition(bpm, sampleRate, 3, 16, 2)
