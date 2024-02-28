@@ -6,25 +6,29 @@ namespace ConsoleApp2.Plugins.Fx.Delay
     public class MonoDelay : PluginBase
     {
         public double Feedback = 0.3, Mix = 1;
-        Quantize quantize = Quantize.Q1_8D;
         double[] buffer;
         int bufferFillIndex;
         ulong bufferOffset;
         public Quantize Quantize
         {
-            get=>quantize;
             set
             {
-                quantize = value;
-                bufferOffset = Measure.SamplesAmount(GetChannel().BelongMixer.Bpm, Quantize, GetChannel().BelongMixer.SampleRate);
+                bufferOffset = Measure.SamplesAmount(GetChannel().BelongMixer.Bpm, value, GetChannel().BelongMixer.SampleRate);
                 buffer = new double[bufferOffset * 2];
                 bufferFillIndex = 0;
             }
         }
         public MonoDelay(Quantize q)
         {
-            this.quantize = q;
-            buffer = new double[Measure.SamplesAmount(GetChannel().BelongMixer.Bpm, Quantize, GetChannel().BelongMixer.SampleRate)];
+            bufferOffset = Measure.SamplesAmount(GetChannel().BelongMixer.Bpm, Quantize, GetChannel().BelongMixer.SampleRate);
+            buffer = new double[bufferOffset * 2];
+            bufferFillIndex = 0;
+        }
+        public MonoDelay(double sec)
+        {
+            bufferOffset = Measure.SecondsToSamplesAmount(sec, GetChannel().BelongMixer.SampleRate);
+            buffer = new double[bufferOffset * 2];
+            bufferFillIndex = 0;
         }
         public override void Process(ref double mono)
         {
