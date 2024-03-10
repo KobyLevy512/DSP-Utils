@@ -20,6 +20,7 @@ namespace ConsoleApp2
 
         public Mixer()
         {
+            //Listener where a channel is added.
             Channels.OnItemAdded += (Channel c) =>
             {
                 c.OnRequestChannels += (ChannelType type, ChannelSubType sub) =>
@@ -29,6 +30,7 @@ namespace ConsoleApp2
                 c.BelongMixer = this;
             };
 
+            //Listener where multi channels been added.
             Channels.OnItemsAdded += (IEnumerable<Channel> ch) =>
             {
                 foreach(Channel c in ch)

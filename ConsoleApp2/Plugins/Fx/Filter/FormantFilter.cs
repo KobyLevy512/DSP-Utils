@@ -77,6 +77,11 @@ namespace ConsoleApp2.Plugins.Fx.Filter
             }
         }
 
+        /// <summary>
+        /// Set the cuttof of this formant
+        /// Basicly is just a lerp between vowels.
+        /// </summary>
+        /// <param name="cutoff"></param>
         public void SetCutoff(double cutoff)
         {
             cutoff = cutoff / 5000.0;

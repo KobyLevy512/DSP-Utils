@@ -6,7 +6,12 @@ namespace ConsoleApp2.Plugins.Fx.Dynamic
         public double Sustain = 1;
         uint attack, decay, release;
         double curAttack, attckStep, curDecay, decayStep, curRelease, releaseStep;
+        bool isRelease;
 
+        public bool IsRelease
+        {
+            get=>isRelease;
+        }
         public uint Attack
         {
             get => attack;
@@ -36,6 +41,7 @@ namespace ConsoleApp2.Plugins.Fx.Dynamic
         }
         public void Start()
         {
+            isRelease = false;
             curRelease = 0;
             curAttack = 0;
             curDecay = 1;
@@ -43,6 +49,7 @@ namespace ConsoleApp2.Plugins.Fx.Dynamic
 
         public void End()
         {
+            isRelease = true;
             curAttack = 1;
             curDecay = 0;
             curRelease = 1;
@@ -81,6 +88,7 @@ namespace ConsoleApp2.Plugins.Fx.Dynamic
             }
             else
             {
+                isRelease = false;
                 l *= Sustain;
                 r *= Sustain;
             }
