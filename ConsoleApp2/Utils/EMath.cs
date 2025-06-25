@@ -21,6 +21,15 @@ namespace ConsoleApp2.Utils
             return a + (b - a) * ratio;
         }
 
+        //Return lerp hermite between values.
+        public static float Hermite(float y0, float y1, float y2, float y3, float x)
+        {
+            float c0 = y1;
+            float c1 = 0.5f * (y2 - y0);
+            float c2 = y0 - 2.5f * y1 + 2.0f * y2 - 0.5f * y3;
+            float c3 = 0.5f * (y3 - y0) + 1.5f * (y1 - y2);
+            return ((c3 * x + c2) * x + c1) * x + c0;
+        }
         /// <summary>
         /// Return a 1 second of sinewave.
         /// </summary>
